@@ -1,4 +1,4 @@
-# ДЗ №1
+# HW №1
 import re
 from pathlib import Path
 from my_pack.style import *
