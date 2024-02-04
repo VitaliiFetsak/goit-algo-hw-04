@@ -1,48 +1,22 @@
-# HW №1
-import re
-from pathlib import Path
-from my_pack.style import *
-
-# Функції модуля
-def total_salary(path)->tuple:
+def total_salary(file: str):
+    total_salary = 0
+    num_developers = 0
     try:
-        with open(path, 'r', encoding = 'utf-8') as fh:
-            lines = fh.readlines()
-        # обробка даних, отриманих з файлу
-        emploeer_count = len(lines)
-        total = 0
-        average = 0
-        p=r'[,]'
-        for line in lines:
-            line = re.sub(r'\n','',line)    # Видалення символу переносу строки
-            line = re.split(p, line)        # Розбиття на елементи за заданим розділювачем
-            total += int(line[1])
-        average = total / emploeer_count
-    except Exception as error:
-        print_error(f'Error: {error}')
-    
-    return (total, average)
+        with open(file, "r", encoding = "UTF-8") as list_salary:
+            for line in list_salary:
+                parts = line.split(",")
+                if len(parts)==2:                    
+                    salary = int(parts[1].strip()) 
+                    total_salary += salary
+                    num_developers += 1
+    except FileNotFoundError:
+        print(f"file  {file} not found.")
+        return None
+    if num_developers == 0:
+        print("The file is in the wrong format or is empty.")
+        return None
+    average_salary = int(total_salary / num_developers)
+    print (f"Загальна сума заробітної плати: {total_salary}\nСередня заробітна плата розробників: {average_salary}")
 
-# ----------------------------------------------------
-# Головна програма
-def main():
-    print_tytle('Загальна та середня ЗП працівників')
-    data_dir = Path('data')
-    data_file = Path('salary_file.txt')
-    data_path = data_dir / data_file
-    section_name ='Робота з базою даних:\n'+ data_path.__str__()
-    print_section(section_name)
-    
-    total, average = total_salary(data_path)
-    print(f'\
-Загальна сума заробітної плати: {total}\n\
-Середня заробітна плата: {average}')
-    print_end('Кінець')
-    
-# ----------------------------------------------------   
-# Точка входу
-# print_serv_msg(f'Check: __name__ = {__name__}') # Перевірка коректності входу, для головного скрипта - "__main__"
-if __name__ == '__main__':
-    main()
-else:
-    print_error('Помилка виконання скрипта!')
+path_to_file = './GOIT-ALDO-HW-04/list_salary.txt'
+total_salary(path_to_file)
